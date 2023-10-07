@@ -1,14 +1,15 @@
-<?php  
-require_once("data.php")
+<?php
+require_once("data.php");
 
-class Parentclass {
+class Parentclass
+{
 	protected $mysqli;
-	public function __construct() {
+	public function __construct()
+	{
 		$this->mysqli = new mysqli(SERVER, USERID, PASSWORD, DATABASE);
 	}
-	function __destruct() {
+	function __destruct()
+	{
 		$this->mysqli->close();
 	}
 }
-
-?>
