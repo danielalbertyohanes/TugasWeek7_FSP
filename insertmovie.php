@@ -1,7 +1,7 @@
 <?php
 session_start();
-if (!isset($_SESSION['userid'])) header("location: login.php");
-if (!in_array("INSMV", $_SESSION['menu'])) header("location: index.php");
+//if (!isset($_SESSION['userid'])) header("location: login.php");
+//if (!in_array("INSMV", $_SESSION['menu'])) header("location: index.php");
 
 $mysqli = new mysqli("localhost", "root", "", "movie");
 ?>

@@ -51,12 +51,22 @@ $LIMIT = 3;
 
 	echo "<div style='margin-bottom: 10px;'>";
 	echo "<form method='get'>";
-	echo "<label>Masukkan judul</label> ";
+	echo "<label>Cari Judul</label> ";
 	echo "<input type='text' name='cari'> ";
 	echo "<button type='submit'>Cari</button>";
+	echo "<br>";
+	echo "<br>";
+	echo "<button type='button' id='lanjut'>Buat Cerita Baru</button>"; // Menggunakan type 'button' bukan 'submit'
 	echo "</form>";
-	if (isset($_GET['cari'])) echo "<p><i>Hasil pencarian untuk '" . $_GET['cari'] . "'</i></p>";
-	echo "</div>";
+
+	// Menambahkan script JavaScript untuk mengarahkan ke 'login.php'
+	echo "<script type='text/javascript'>";
+	echo	"document.getElementById('lanjut').addEventListener('click', function() {";
+	echo		"window.location.href = 'login.php';"; //masih harus di ganti lagi
+	echo	"});";
+	echo "</script>";
+
+
 
 	echo "<table border='1'>
 	<tr> 
@@ -76,20 +86,23 @@ $LIMIT = 3;
 		echo "<td>
 		<img class='poster' src='poster/" . $row['idmovie'] . "." . $row['extention'] . "'>
 		</td>";
+
 		echo "<td>" . $row['judul'] . "</td>";
+
 		echo "<td>";
 		$sql = "Select g.nama From genre g Inner Join genre_movie gm On g.idgenre=gm.idgenre Where gm.idmovie=?";
 		$stmt = $mysqli->prepare($sql);
 		$stmt->bind_param("i", $row['idmovie']);
 		$stmt->execute();
 		$res_genre = $stmt->get_result();
-		echo "<ul>";
 
+		echo "<ul>";
 		while ($row_genre = $res_genre->fetch_assoc()) {
 			echo "<li>" . $row_genre['nama'] . "</li>";
 		}
 		echo "</ul>";
 		echo "</td>";
+
 		echo "<td>" . $row['rilis'] . "</td>";
 		echo "<td class='rata-kanan'>" . $row['skor'] . "</td>";
 		echo "<td>" . ($row['serial'] ? "Ya" : "Tidak") . "</td>";
@@ -106,6 +119,13 @@ $LIMIT = 3;
 	echo "</div>";
 	$mysqli->close();
 	?>
+
+	<script type="text/javascript">
+		$('body').on('click', '.lanjut', function() {
+			window.location.href = "login.php";
+		});
+	</script>
+
 </body>
 
 </html>
