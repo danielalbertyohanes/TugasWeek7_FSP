@@ -3,7 +3,7 @@ require_once("class/users.php");
 
 if(isset($_POST['signup'])) {
 	$data = array();
-	$data['userid']=$_POST['userid'];
+	$data['idusers']=$_POST['idusers'];
 	$data['nama']=$_POST['nama'];
 	$data['password']=$_POST['password'];
 	$data['password2']=$_POST['password2'];
@@ -16,5 +16,3 @@ if(isset($_POST['signup'])) {
 }
 
 header("location: registrasi.php");
-
-?>

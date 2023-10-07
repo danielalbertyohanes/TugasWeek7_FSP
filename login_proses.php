@@ -2,11 +2,11 @@
 require_once("class/users.php");
 
 if(isset($_POST['signin'])) {
-	$userid=$_POST['userid'];
+	$idusers=$_POST['idusers'];
 	$password=$_POST['password'];
 	$users=new Users();
 
-	if($users->login($userid, $password) == "sukses") {
+	if($users->login($idusers, $password) == "sukses") {
 		header("location: index.php");
 	} else {
 		header("location: login.php?error=gagal");
@@ -14,5 +14,3 @@ if(isset($_POST['signin'])) {
 } else {
 	header("location: login.php");
 }
-
-?>

@@ -1,8 +1,8 @@
 <?php
-$mysqli = new mysqli("localhost", "root", "", "movie");
-/*if ($mysqli->connect_errno) {
-    echo "Failed to connect to MySQL: " . $mysqli->connect_error;
-}*/
+$mysqli = new mysqli("localhost", "root", "", "story");
+if ($mysqli->connect_errno) {
+	echo "Failed to connect to MySQL: " . $mysqli->connect_error;
+}
 $LIMIT = 3;
 ?>
 <!DOCTYPE html>
@@ -36,14 +36,14 @@ $LIMIT = 3;
 	$cari = isset($_GET['cari']) ? $_GET['cari'] : "";
 	$cari_persen = "%" . $cari . "%";
 
-	$sql = "Select * From Movie Where judul Like ?";
+	$sql = "Select * From cerita Where judul Like ?";
 	$stmt = $mysqli->prepare($sql);
 	$stmt->bind_param("s", $cari_persen);
 	$stmt->execute();
 	$res = $stmt->get_result();
 	$total_data = $res->num_rows;
 
-	$sql = "Select * From Movie Where judul Like ? Limit ?,?";
+	$sql = "Select * From cerita Where judul Like ? Limit ?,?";
 	$stmt = $mysqli->prepare($sql);
 	$stmt->bind_param("sii", $cari_persen, $offset, $LIMIT);
 	$stmt->execute();
@@ -67,65 +67,44 @@ $LIMIT = 3;
 	echo "</script>";
 
 
-
-	echo "<table border='1'>
+	echo "<table border='3'>
 	<tr> 
-	  <th>Poster</th> <th>Judul</th>
-		<th>Genre</th> <th>Tgl. Rilis</th>
-		<th>Skor</th> <th>Serial</th> 
+	  <th>Judul</th> <th>Pembuat Awal</th> <th>Aksi</th>
 	</tr>";
 
 	while ($row = $res->fetch_assoc()) {
-
-
-		if ($row['skor'] < 5) {
-			echo "<tr class='teks-merah'>";
-		} else {
-			echo "<tr> ";
-		}
-		echo "<td>
-		<img class='poster' src='poster/" . $row['idmovie'] . "." . $row['extention'] . "'>
-		</td>";
-
+		echo "<tr>";
 		echo "<td>" . $row['judul'] . "</td>";
 
-		echo "<td>";
-		$sql = "Select g.nama From genre g Inner Join genre_movie gm On g.idgenre=gm.idgenre Where gm.idmovie=?";
+		// Ambil nama pembuat awal dari tabel users
+		$sql = "SELECT u.nama FROM cerita c INNER JOIN users u ON c.idusers_pembuat_awal = u.idusers WHERE c.idcerita = ?";
 		$stmt = $mysqli->prepare($sql);
-		$stmt->bind_param("i", $row['idmovie']);
+		$stmt->bind_param("i", $row['idcerita']);
 		$stmt->execute();
-		$res_genre = $stmt->get_result();
+		$res_nama_pembuat = $stmt->get_result();
 
-		echo "<ul>";
-		while ($row_genre = $res_genre->fetch_assoc()) {
-			echo "<li>" . $row_genre['nama'] . "</li>";
-		}
-		echo "</ul>";
+		$row_nama_pembuat = $res_nama_pembuat->fetch_assoc();
+		echo "<td>" . $row_nama_pembuat['nama'] . "</td>";
+
+
+		// Tambahkan tombol aksi yang sesuai
+		echo "<td>";
+		echo "<a href='login.php'>Lihat Cerita</a>"; // masih harus di ganti
 		echo "</td>";
 
-		echo "<td>" . $row['rilis'] . "</td>";
-		echo "<td class='rata-kanan'>" . $row['skor'] . "</td>";
-		echo "<td>" . ($row['serial'] ? "Ya" : "Tidak") . "</td>";
 		echo "</tr>";
 	}
 
 	echo "</table>";
 
 	echo "<div>";
-	$maks_page = ceil($total_data / $LIMIT);
+	$maks_page = ceil(($total_data + 1) / $LIMIT);
 	for ($i = 1; $i < $maks_page; $i++) {
 		echo "<a href='index.php?offset=" . ($LIMIT * ($i - 1)) . "&cari=$cari'>$i</a> ";
 	}
 	echo "</div>";
 	$mysqli->close();
 	?>
-
-	<script type="text/javascript">
-		$('body').on('click', '.lanjut', function() {
-			window.location.href = "login.php";
-		});
-	</script>
-
 </body>
 
 </html>

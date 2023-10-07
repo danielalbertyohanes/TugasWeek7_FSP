@@ -1,6 +1,5 @@
 <?php  
 require_once("parent.php");
-require_once("menu.php");
 session_start();
 
 class Users extends Parentclass {
@@ -13,10 +12,10 @@ class Users extends Parentclass {
 	private function EncryptPassword($plainPwd, $salt) {
 		return sha1(sha1($plainPwd).$salt);
 	}
-	private function getSalt($userid) {
-		$sql="Select salt From users Where userid=?";
+	private function getSalt($idusers) {
+		$sql="Select salt From users Where idusers=?";
 		$stmt=$this->mysqli->prepare($sql);
-		$stmt->bind_param("s", $userid);
+		$stmt->bind_param("s", $idusers);
 		$stmt->execute(); 
 		$res = $stmt->get_result();
 		if($row=$res->fetch_assoc())
@@ -24,23 +23,17 @@ class Users extends Parentclass {
 		else return "";
 	}
 	private function generateSession($row){
-		$_SESSION['userid'] = $row['userid'];
+		$_SESSION['idusers'] = $row['idusers'];
 		$_SESSION['nama'] = $row['nama'];
 
-		$menu = new Menu();
-		$res=$menu->getMenuProfil($row['idprofil']);
-		$arr_menu=array();
-		while($row_menu=$res->fetch_assoc()) {
-			$arr_menu[]=$row_menu['idmenu'];
-		}
-		$_SESSION['menu'] = $arr_menu;
 	}
-	public function login($userid, $pwd) {
-		$salt = $this->getSalt($userid);
+	public function login($idusers, $pwd) {
+		$salt = $this->getSalt($idusers);
 		$encPwd = $this->EncryptPassword($pwd, $salt);
-		$sql="Select * From users Where userid=? And password=?";
+		$sql="Select * From users Where idusers=? And password=?";
 		$stmt=$this->mysqli->prepare($sql);
-		$stmt->bind_param("ss", $userid, $encPwd);		$stmt->execute(); 
+		$stmt->bind_param("ss", $idusers, $encPwd);		
+		$stmt->execute(); 
 		$res = $stmt->get_result();
 		if($res->num_rows > 0){
 			$this->generateSession($res->fetch_assoc());
@@ -52,9 +45,7 @@ class Users extends Parentclass {
 		$encPwd = $this->EncryptPassword($arrData['password'], $salt);
 		$sql="Insert into users Values (?,?,?,?)";
 		$stmt=$this->mysqli->prepare($sql);
-		$stmt->bind_param("ssss", $arrData['userid'], $arrData['nama'], $encPwd, $salt);
+		$stmt->bind_param("ssss", $arrData['idusers'], $arrData['nama'], $encPwd, $salt);
 		$stmt->execute();
 	}
 }
-
-?>
