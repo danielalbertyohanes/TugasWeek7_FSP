@@ -23,8 +23,10 @@ $mysqli = new mysqli("localhost", "root", "", "story");
 <body>
     <form method='post' action='insertstory_proses.php' enctype="multipart/form-data">
         <p><label>Judul</label> <input type="text" name="judul" style=" width:25%; margin-left: 30px;"></p>
-        <p><label>Paragraf</label> <input type="text" name="paragraf" style="width:25%; height:100px; margin-left: 10px;" /></p>
+        <p><label>Paragraf</label> <textarea name="paragraf" style=" margin-left: 10px;"></textarea></p>
         <br>
+        <input type="tel" name="" id="">
+        input
         <p><input type="submit" name="btnsubmit" value="Simpan"></p>
     </form>
     <!-- <script type="text/javascript">
