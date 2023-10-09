@@ -90,7 +90,7 @@ $LIMIT = 3;
 
 		// Tambahkan tombol aksi yang sesuai
 		echo "<td>";
-		echo "<a href='login.php'>Lihat Cerita</a>"; // masih harus di ganti
+		echo "<a href='story.php'>Lihat Cerita</a>"; // masih harus di ganti
 		echo "</td>";
 
 		echo "</tr>";

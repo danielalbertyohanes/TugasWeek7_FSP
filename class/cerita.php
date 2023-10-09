@@ -33,12 +33,16 @@ class Cerita extends Parentclass
         $paragraf = $arrData['paragraf'];
         $idusers = $arrData['idusers'];
 
-
         $sql = "Insert Into cerita (judul, idusers) Values (?,?)";
         $stmt = $this->mysqli->prepare($sql);
         $stmt->bind_param("si", $judul, $idUser);
         $stmt->execute();
         $idcerita = $stmt->insert_id;
         return $idcerita;
+    }
+
+    public function insertParagraf()
+    {
+        //perlu di isi lagi
     }
 }
