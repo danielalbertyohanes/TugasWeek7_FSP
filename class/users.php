@@ -1,50 +1,60 @@
-<?php  
+<?php
 require_once("parent.php");
 session_start();
 
-class Users extends Parentclass {
-	public function __construct() {
+class Users extends Parentclass
+{
+	public function __construct()
+	{
 		parent::__construct();
 	}
-	private function generateSalt() {
+	private function generateSalt()
+	{
 		return substr(sha1(date("YmdHis")), 0, 10);
 	}
-	private function EncryptPassword($plainPwd, $salt) {
-		return sha1(sha1($plainPwd).$salt);
+	private function EncryptPassword($plainPwd, $salt)
+	{
+		return sha1(sha1($plainPwd) . $salt);
 	}
-	private function getSalt($idusers) {
-		$sql="Select salt From users Where idusers=?";
-		$stmt=$this->mysqli->prepare($sql);
+	private function getSalt($idusers)
+	{
+		$sql = "Select salt From users Where idusers=?";
+		$stmt = $this->mysqli->prepare($sql);
 		$stmt->bind_param("s", $idusers);
-		$stmt->execute(); 
+		$stmt->execute();
 		$res = $stmt->get_result();
-		if($row=$res->fetch_assoc())
+		if ($row = $res->fetch_assoc())
 			return $row['salt'];
 		else return "";
 	}
-	private function generateSession($row){
+	private function generateSession($row)
+	{
 		$_SESSION['idusers'] = $row['idusers'];
 		$_SESSION['nama'] = $row['nama'];
-
 	}
-	public function login($idusers, $pwd) {
+	public function login($idusers, $pwd)
+	{
 		$salt = $this->getSalt($idusers);
 		$encPwd = $this->EncryptPassword($pwd, $salt);
-		$sql="Select * From users Where idusers=? And password=?";
-		$stmt=$this->mysqli->prepare($sql);
-		$stmt->bind_param("ss", $idusers, $encPwd);		
-		$stmt->execute(); 
+		$sql = "Select * From users Where idusers=? And password=?";
+		$stmt = $this->mysqli->prepare($sql);
+		$stmt->bind_param("ss", $idusers, $encPwd);
+		$stmt->execute();
 		$res = $stmt->get_result();
-		if($res->num_rows > 0){
+		if ($res->num_rows > 0) {
 			$this->generateSession($res->fetch_assoc());
 			return "sukses";
 		} else "gagal";
 	}
-	public function registrasi($arrData) {
+	public function registrasi($arrData)
+	{
 		$salt = $this->generateSalt();
 		$encPwd = $this->EncryptPassword($arrData['password'], $salt);
-		$sql="Insert into users Values (?,?,?,?)";
-		$stmt=$this->mysqli->prepare($sql);
+		$sql = "INSERT INTO users (idusers, nama, password, salt) VALUES (?,?,?,?)";
+		$stmt = $this->mysqli->prepare($sql);
+		if (!$stmt) {
+			die("Error in SQL query: " . $this->mysqli->error);
+		}
 		$stmt->bind_param("ssss", $arrData['idusers'], $arrData['nama'], $encPwd, $salt);
 		$stmt->execute();
 	}

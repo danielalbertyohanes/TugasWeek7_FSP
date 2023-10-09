@@ -57,6 +57,7 @@ $LIMIT = 3;
 	echo "<br>";
 	echo "<br>";
 	echo "<button type='button' id='lanjut'>Buat Cerita Baru</button>"; // Menggunakan type 'button' bukan 'submit'
+	echo "<br>";
 	echo "</form>";
 
 	// Menambahkan script JavaScript untuk mengarahkan ke 'login.php'
