@@ -13,19 +13,6 @@ $LIMIT = 3;
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title></title>
-    <style type="text/css">
-        .rata-kanan {
-            text-align: right;
-        }
-
-        .poster {
-            max-width: 100px;
-        }
-
-        .teks-merah {
-            color: red;
-        }
-    </style>
 </head>
 
 <body>
