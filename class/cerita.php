@@ -28,21 +28,40 @@ class Cerita extends Parentclass
 
     public function insertCerita($arrData)
     {
-
         $judul = $arrData['judul'];
         $paragraf = $arrData['paragraf'];
-        $idusers = $arrData['idusers'];
+        $iduser = $arrData['idusers'];
+        $tanggal = $arrData['tanggal'];
 
-        $sql = "Insert Into cerita (judul, idusers) Values (?,?)";
+        $sql = "INSERT INTO `story`.`cerita` (`judul`, `idusers_pembuat_awal`) VALUES (?, ?);";
         $stmt = $this->mysqli->prepare($sql);
-        $stmt->bind_param("si", $judul, $idUser);
+        $stmt->bind_param("ss", $judul, $iduser); // Menghapus double dollar sign
         $stmt->execute();
         $idcerita = $stmt->insert_id;
+
+        $paragraf_sql = "INSERT INTO `story`.`paragraf` (`isi_paragraf`, `tanggal_buat`, `idcerita`, `idusers`) VALUES (?,?,?,?);";
+        $paragraf_stmt = $this->mysqli->prepare($paragraf_sql);
+        $paragraf_stmt->bind_param("ssis", $paragraf, $tanggal, $idcerita, $iduser); // Mengubah "s" menjadi "i" untuk idcerita
+        $paragraf_stmt->execute();
+        $idparagraf = $paragraf_stmt->insert_id;
+
         return $idcerita;
     }
 
-    public function insertParagraf()
+
+    public function insertParagraf($arrData)
     {
-        //perlu di isi lagi
+        $paragraf = $arrData['paragraf'];
+        $iduser = $arrData['idusers'];
+        $tanggal = $arrData['tanggal'];
+        $idcerita = $arrData['idcerita'];
+
+        $paragraf_sql = "INSERT INTO `story`.`paragraf` (`isi_paragraf`, `tanggal_buat`, `idcerita`, `idusers`) VALUES (?,?,?,?);";
+        $paragraf_stmt = $this->mysqli->prepare($paragraf_sql);
+        $paragraf_stmt->bind_param("ssis", $paragraf, $tanggal, $idcerita, $iduser); // Mengubah "s" menjadi "i" untuk idcerita
+        $paragraf_stmt->execute();
+        $idparagraf = $paragraf_stmt->insert_id;
+
+        return $idparagraf;
     }
 }
