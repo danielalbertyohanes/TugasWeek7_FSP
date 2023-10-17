@@ -10,7 +10,7 @@ if (isset($_POST['signup'])) {
 	if ($data['password'] == $data['password2']) {
 		$users = new Users();
 		$users->registrasi($data);
-		header("location: login.php");
+		header("location: index.php");
 	} else {
 		header("location: registrasi.php?error=pwd");
 	}
