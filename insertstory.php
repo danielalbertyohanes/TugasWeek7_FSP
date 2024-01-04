@@ -27,6 +27,8 @@ session_start();
         <p><label>Paragraf</label> <textarea name="paragraf" style=" margin-left: 10px;"></textarea></p>
         <br>
         <p><input type="submit" name="btnsubmit" value="Simpan"></p>
+        <br>
+        <a href='home.php'>&lt;&lt; Kembali Ke Halaman Awal</a>
     </form>
 </body>
 

@@ -88,7 +88,7 @@ $LIMIT = 3;
 
     echo "<div>";
     $maks_page = ceil(($total_data + 1) / $LIMIT);
-    for ($i = 1; $i < $maks_page; $i++) {
+    for ($i = 1; $i <= $maks_page; $i++) {
         echo "<a href='home.php?offset=" . ($LIMIT * ($i - 1)) . "&cari=$cari'>$i</a> ";
     }
     echo "</div>";
