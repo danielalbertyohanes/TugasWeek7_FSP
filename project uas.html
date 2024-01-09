@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Project UAS</title>
+<style type="text/css">
+* { margin: 0px; }
+.container { padding: 1em; }
+
+/* seluruhnya */
+main { margin-top: 20px; }
+.form-control { width: 100%; }
+.kategori { display: none; margin-bottom: 20px;  }
+
+.ceritaku {
+ padding: 1em;	min-height: 200px; background: turquoise; flex-grow: 1; 
+}
+
+.kumpulan {
+	padding: 1em;	min-height: 400px; background: powderblue; flex-grow: 1; 
+}
+
+.list-cerita {
+	display: flex;
+}
+
+/* khusus smartphone */
+@media (max-width: 575px) {
+	.kategori { display: block; }
+	.ceritaku { display: none; /* ini harusnya disembunyikan pake jquery, bukan css di sini ya */ }
+}
+
+/* khusus tablet */
+@media (min-width: 576px) and (max-width: 1023px) {
+	.list-cerita {
+		flex-direction: column;
+	}
+}
+
+/* khusus PC */
+@media (min-width: 1024px) {
+	.list-cerita {
+		flex-direction: row-reverse; /* karena struktur HTML .kumpulan di atas, maka harus row-reverse supaya .kumpulan muncuil di sebelah kanan */
+	}
+	.ceritaku { flex-basis: 33%; }
+	.kumpulan { flex-basis: 66%; }
+}
+
+</style>
+</head>
+<body>
+<div class="container">
+<h1>CERBUNG</h1>
+<h4>Cerita Bersambung</h4>
+<main>
+	<div class="kategori">
+		<label>Kategori</label>
+		<div>
+			<select class="form-control">
+				<option value="kumpulan">Kumpulan Cerita</option>
+				<option value="ceritaku">Ceritaku</option>
+			</select>
+		</div>
+	</div>
+	<div class="list-cerita">
+		<section class="kumpulan"><h2>Kumpulan Cerita</h2></section>
+		<section class="ceritaku"><h2>Ceritaku</h2></section>
+	</div>
+</main>
+</div>
+</body>
+</html>
