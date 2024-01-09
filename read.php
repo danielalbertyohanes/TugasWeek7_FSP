@@ -1,14 +1,27 @@
 <?php
 session_start();
-//if (!isset($_SESSION['userid'])) header("location: login.php");
-//if (!in_array("INSMV", $_SESSION['menu'])) header("location: index.php");
-
 $mysqli = new mysqli("localhost", "root", "", "story");
+
 if ($mysqli->connect_errno) {
     echo "Failed to connect to MySQL: " . $mysqli->connect_error;
 }
+
 if (isset($_GET['idcerita'])) {
     $idcerita = $_GET['idcerita'];
+    
+    $sql = "SELECT * FROM cerita WHERE idcerita = ?";
+    $stmt = $mysqli->prepare($sql);
+    $stmt->bind_param("i", $idcerita);
+    $stmt->execute();
+    $res_cerita = $stmt->get_result();
+
+ if ($res_cerita->num_rows > 0) {
+        $row = $res_cerita->fetch_assoc();
+        $judul = $row['judul'];
+        echo "<h1>$judul</h1>";
+    } else {
+        echo "Cerita tidak ditemukan.";
+    }
 
     // Query untuk mengambil data cerita berdasarkan ID cerita
     $sql = "SELECT * FROM cerita c inner join paragraf p on c.idcerita = p.idcerita WHERE c.idcerita = ?";
@@ -19,8 +32,6 @@ if (isset($_GET['idcerita'])) {
 
     if ($res->num_rows > 0) {
         $row = $res->fetch_assoc();
-        $judul = $row['judul'];
-        echo "<h1>$judul</h1>";
         $paragraf = $row['isi_paragraf'];
         echo "<p style='margin-left: 0%; margin-right: 10%; text-aligment: justify;'>$paragraf</p>";
         $row = null;
@@ -28,9 +39,8 @@ if (isset($_GET['idcerita'])) {
             $paragraf = $row['isi_paragraf'];
             echo "<p style=' font-size: Large; margin-left: 0%; margin-right: 10%; text-align: justify;'>$paragraf</p>";
         }
-    } else {
-        echo "Cerita tidak ditemukan.";
     }
+
 } else {
     echo "Parameter ID cerita tidak ditemukan.";
 }

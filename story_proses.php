@@ -1,11 +1,6 @@
 <?php
 require_once("class/cerita.php");
 session_start();
-$mysqli = new mysqli("localhost", "root", "", "story");
-if ($mysqli->connect_errno) {
-    echo "Failed to connect to MySQL: " . $mysqli->connect_error;
-}
-
 if (isset($_POST['btnSubmit'])) {
     $cerita = new Cerita();
     $idcerita = $_POST['idcerita'];
@@ -21,6 +16,5 @@ if (isset($_POST['btnSubmit'])) {
 
     $cerita->insertParagraf($data);
 }
-$mysqli->close();
 // Setelah selesai, Anda mungkin ingin mengarahkan pengguna kembali ke halaman cerita
-header("location: story.php?idcerita=" . $idcerita);
+header("location: read.php?idcerita=" . $idcerita);

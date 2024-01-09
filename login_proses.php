@@ -1,6 +1,7 @@
-<?php  //login_proses
-session_start();
+<?php
 require_once("class/users.php");
+session_start();
+
 
 if (isset($_POST['signin'])) {
 	$idusers = $_POST['idusers'];
@@ -8,11 +9,14 @@ if (isset($_POST['signin'])) {
 	$users = new Users();
 
 	if ($users->login($idusers, $password) == "sukses") {
-		header("location: home.php");
 		$_SESSION['idusers'] = $idusers;
+		header("Location: home.php"); // perbaikan disini
+		exit(); // pastikan untuk keluar setelah redirect
 	} else {
-		header("location: index.php?error=gagal");
+		header("Location: index.php?error=gagal");
+		exit(); // pastikan untuk keluar setelah redirect
 	}
 } else {
-	header("location: index.php");
+	header("Location: index.php");
+	exit(); // pastikan untuk keluar setelah redirect
 }

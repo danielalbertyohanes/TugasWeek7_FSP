@@ -1,42 +1,54 @@
 <?php
+
 require_once("parent.php");
-session_start();
 
 class Users extends Parentclass
 {
 	public function __construct()
 	{
 		parent::__construct();
+
+		// Check if a session is already active before starting a new one
+		if (session_status() === PHP_SESSION_NONE) {
+			session_start();
+		}
 	}
+
 	private function generateSalt()
 	{
 		return substr(sha1(date("YmdHis")), 0, 10);
 	}
+
 	private function EncryptPassword($plainPwd, $salt)
 	{
 		return sha1(sha1($plainPwd) . $salt);
 	}
+
 	private function getSalt($idusers)
 	{
-		$sql = "Select salt From users Where idusers=?";
+		$sql = "SELECT salt FROM users WHERE idusers=?";
 		$stmt = $this->mysqli->prepare($sql);
 		$stmt->bind_param("s", $idusers);
 		$stmt->execute();
 		$res = $stmt->get_result();
-		if ($row = $res->fetch_assoc())
+		if ($row = $res->fetch_assoc()) {
 			return $row['salt'];
-		else return "";
+		} else {
+			return "";
+		}
 	}
+
 	private function generateSession($row)
 	{
 		$_SESSION['idusers'] = $row['idusers'];
 		$_SESSION['nama'] = $row['nama'];
 	}
+
 	public function login($idusers, $pwd)
 	{
 		$salt = $this->getSalt($idusers);
 		$encPwd = $this->EncryptPassword($pwd, $salt);
-		$sql = "Select * From users Where idusers=? And password=?";
+		$sql = "SELECT * FROM users WHERE idusers=? AND password=?";
 		$stmt = $this->mysqli->prepare($sql);
 		$stmt->bind_param("ss", $idusers, $encPwd);
 		$stmt->execute();
@@ -44,8 +56,11 @@ class Users extends Parentclass
 		if ($res->num_rows > 0) {
 			$this->generateSession($res->fetch_assoc());
 			return "sukses";
-		} else "gagal";
+		} else {
+			return "gagal";
+		}
 	}
+
 	public function registrasi($arrData)
 	{
 		$salt = $this->generateSalt();
